@@ -1,8 +1,8 @@
 package tes.volley;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,15 +10,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
+import tes.volley.gsonparser.ArrayBerita;
+import tes.volley.gsonparser.Berita;
+import tes.volley.gsonparser.GsonRekuest;
+import tes.volley.gsonparser.JaksonRekuest;
 import tes.volley.volleynet.Konstans;
 import tes.volley.volleynet.SetDataAPI;
 import tes.volley.volleynet.VolleyAppController;
@@ -30,17 +32,12 @@ public class MainActivity extends AppCompatActivity {
     private String jsonhasil = "";
 
     private Button tombolmintadata;
+    private Button tombolmintadatagson;
+    private Button tombolmintadatajakson;
     private String requestLinks = "";
 
 
-
     private TextView tekshasil;
-
-
-
-
-
-
 
 
     @Override
@@ -52,12 +49,19 @@ public class MainActivity extends AppCompatActivity {
         dialogprogs = new ProgressDialog(MainActivity.this);
 
 
-        requestLinks = SetDataAPI.getDataParamURL("1", Konstans.API_POSTBARU_HALAMAN);
+//        requestLinks = SetDataAPI.getDataParamURL("1", Konstans.API_POSTBARU_HALAMAN);
+        requestLinks = SetDataAPI.getDataParamURL("100", Konstans.API_POSTBARU_LIMIT);
 
         tekshasil = (TextView) findViewById(R.id.teks_hasil);
         tombolmintadata.setOnClickListener(listenertombol);
 
-        Log.w("LINK","LINK " + requestLinks);
+        tombolmintadatagson = (Button) findViewById(R.id.tombol_mintadatagson);
+        tombolmintadatagson.setOnClickListener(listenertombolgson);
+
+        tombolmintadatajakson = (Button) findViewById(R.id.tombol_mintadatajakson);
+        tombolmintadatajakson.setOnClickListener(listenertomboljakson);
+
+        Log.w("LINK", "LINK " + requestLinks);
     }
 
 
@@ -94,8 +98,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     View.OnClickListener listenertombol = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -104,6 +106,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
+    View.OnClickListener listenertombolgson = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            cekGsonMintaData();
+        }
+    };
+
+
+    View.OnClickListener listenertomboljakson = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            cekJaksonnMintaData();
+        }
+    };
 
 
     private void cekMintaData() {
@@ -122,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.w("SUKSES","SUKSES HASIL");
+                        Log.w("SUKSES", "SUKSES HASIL");
                         tekshasil.setText("" + response);
 
                         dialogprogs.dismiss();
@@ -136,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                         error.printStackTrace();
 
-                        Log.w("ERROR","ERROR HASIL");
+                        Log.w("ERROR", "ERROR HASIL");
                         tekshasil.setText(error.getMessage() + " ");
 
                         dialogprogs.dismiss();
@@ -172,26 +191,106 @@ public class MainActivity extends AppCompatActivity {
         };
 
         //tambahkan ke request voli
-        VolleyAppController.getInstance().addToRequestQueue(strReq,"GET");
+        VolleyAppController.getInstance().addToRequestQueue(strReq, "GET");
 
+    }
+
+
+    //CEK DATA SECARA GSON
+    private void cekGsonMintaData() {
+
+
+        dialogprogs = new ProgressDialog(MainActivity.this);
+        dialogprogs.setMessage("Memuat data...");
+        dialogprogs.setCancelable(false);
+
+        dialogprogs.show();
+        tombolmintadatagson.setEnabled(false);
+
+        GsonRekuest<ArrayBerita> gsonReq = new GsonRekuest<>(Request.Method.GET, requestLinks, ArrayBerita.class, null,
+
+                new Response.Listener<ArrayBerita>() {
+                    @Override
+                    public void onResponse(ArrayBerita response) {
+
+                        List<Berita> arrberita = response.getResult();
+                        Log.w("PANJANG", "PANJANG ARRAY GSON " + arrberita.size());
+                        tekshasil.setText("Panjang array json " + arrberita.size());
+
+
+                        dialogprogs.dismiss();
+                        tombolmintadatagson.setEnabled(true);
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        error.printStackTrace();
+                        Log.w("ERROR", "ERROR GSON");
+
+                        tekshasil.setText("Panjang array json " + error.getMessage());
+
+                        dialogprogs.dismiss();
+                        tombolmintadatagson.setEnabled(true);
+                    }
+                }
+        );
+
+        //tambahkan ke permintaan
+        VolleyAppController.getInstance().addToRequestQueue(gsonReq);
     }
 
 
 
 
+    //CEK DATA SECARA JAKSON
+    private void cekJaksonnMintaData() {
 
 
+        dialogprogs = new ProgressDialog(MainActivity.this);
+        dialogprogs.setMessage("Memuat data...");
+        dialogprogs.setCancelable(false);
+
+        dialogprogs.show();
+        tombolmintadatajakson.setEnabled(false);
 
 
+        JaksonRekuest<ArrayBerita> jaksonreq = new JaksonRekuest<>(Request.Method.GET, requestLinks, ArrayBerita.class, null,
+                new Response.Listener<ArrayBerita>() {
+                    @Override
+                    public void onResponse(ArrayBerita response) {
 
 
+                        List<Berita> arrberita = response.getResult();
+                        Log.w("PANJANG", "PANJANG ARRAY JAKSON " + arrberita.size());
+                        tekshasil.setText("Panjang array json " + arrberita.size());
 
 
+                        dialogprogs.dismiss();
+                        tombolmintadatajakson.setEnabled(true);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        error.printStackTrace();
+                        Log.w("ERROR", "ERROR JAKSON");
+
+                        tekshasil.setText("Panjang array json " + error.getMessage());
+
+                        dialogprogs.dismiss();
+                        tombolmintadatajakson.setEnabled(true);
+                    }
+                }
+        );
 
 
-
-
-
+        //tambahkan ke permintaan
+        VolleyAppController.getInstance().addToRequestQueue(jaksonreq);
+    }
 
 
 }

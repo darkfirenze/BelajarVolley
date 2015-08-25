@@ -28,8 +28,8 @@ public class OkhttpStack extends HurlStack {
 
         okHttpKlien = new OkHttpClient();
         okHttpKlien.setConnectTimeout(15, TimeUnit.SECONDS);
-        okHttpKlien.setReadTimeout(15, TimeUnit.SECONDS);
-        okHttpKlien.setWriteTimeout(15, TimeUnit.SECONDS);
+        okHttpKlien.setReadTimeout(30, TimeUnit.SECONDS);
+//        okHttpKlien.setWriteTimeout(60, TimeUnit.SECONDS);
 
         okFactory = new OkUrlFactory(okHttpKlien);
     }
@@ -39,6 +39,9 @@ public class OkhttpStack extends HurlStack {
     protected HttpURLConnection createConnection(URL url) throws IOException {
         super.createConnection(url);
 
-        return okFactory.open(url);
+        HttpURLConnection httpconnect = okFactory.open(url);
+        httpconnect.setRequestProperty("Accept-Encoding", "");
+
+        return httpconnect;
     }
 }

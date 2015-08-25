@@ -34,7 +34,22 @@
         android:id="@+id/tombol_mintadata"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ambil Volley"/>
+        android:text="Ambil Volley String"/>
+
+
+    <Button
+        android:id="@+id/tombol_mintadatagson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ambil Volley GSON"/>
+
+
+
+    <Button
+        android:id="@+id/tombol_mintadatajakson"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ambil Volley Jackson"/>
 
 
 </LinearLayout>
