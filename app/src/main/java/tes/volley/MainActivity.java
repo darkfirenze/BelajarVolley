@@ -21,9 +21,10 @@ import tes.volley.gsonparser.ArrayBerita;
 import tes.volley.gsonparser.Berita;
 import tes.volley.gsonparser.GsonRekuest;
 import tes.volley.gsonparser.JaksonRekuest;
+import tes.volley.volleynet.Apis;
 import tes.volley.volleynet.Konstans;
 import tes.volley.volleynet.SetDataAPI;
-import tes.volley.volleynet.VolleyAppController;
+import tes.volley.volleynet.VolleySingletons;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        VolleyAppController.getInstance().getmReqQueue().cancelAll("GET");
-        VolleyAppController.getInstance().getmReqQueue().getCache().clear();
+        VolleySingletons.getInstance(MainActivity.this).getmReqQueue().cancelAll("GET");
+        VolleySingletons.getInstance(MainActivity.this).getmReqQueue().getCache().clear();
 
 
     }
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         //tambahkan ke request voli
-        VolleyAppController.getInstance().addToRequestQueue(strReq, "GET");
+        VolleySingletons.getInstance(MainActivity.this).addToRequestQueue(strReq, "GET");
 
     }
 
@@ -207,8 +208,40 @@ public class MainActivity extends AppCompatActivity {
         dialogprogs.show();
         tombolmintadatagson.setEnabled(false);
 
-        GsonRekuest<ArrayBerita> gsonReq = new GsonRekuest<>(Request.Method.GET, requestLinks, ArrayBerita.class, null,
+//        GsonRekuest<ArrayBerita> gsonReq = new GsonRekuest<>(Request.Method.GET, requestLinks, ArrayBerita.class, null,
+//
+//                new Response.Listener<ArrayBerita>() {
+//                    @Override
+//                    public void onResponse(ArrayBerita response) {
+//
+//                        List<Berita> arrberita = response.getResult();
+//                        Log.w("PANJANG", "PANJANG ARRAY GSON " + arrberita.size());
+//                        tekshasil.setText("Panjang array json " + arrberita.size());
+//
+//
+//                        dialogprogs.dismiss();
+//                        tombolmintadatagson.setEnabled(true);
+//                    }
+//                },
+//
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                        error.printStackTrace();
+//                        Log.w("ERROR", "ERROR GSON");
+//
+//                        tekshasil.setText("Panjang array json " + error.getMessage());
+//
+//                        dialogprogs.dismiss();
+//                        tombolmintadatagson.setEnabled(true);
+//                    }
+//                }
+//        );
 
+
+
+        GsonRekuest<ArrayBerita> gsonreqs = Apis.getGsonRequestAllBerita(requestLinks,
                 new Response.Listener<ArrayBerita>() {
                     @Override
                     public void onResponse(ArrayBerita response) {
@@ -222,11 +255,9 @@ public class MainActivity extends AppCompatActivity {
                         tombolmintadatagson.setEnabled(true);
                     }
                 },
-
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                         error.printStackTrace();
                         Log.w("ERROR", "ERROR GSON");
 
@@ -238,8 +269,13 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+
+
+
+
+
         //tambahkan ke permintaan
-        VolleyAppController.getInstance().addToRequestQueue(gsonReq);
+        VolleySingletons.getInstance(MainActivity.this).addToRequestQueue(gsonreqs);
     }
 
 
@@ -289,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //tambahkan ke permintaan
-        VolleyAppController.getInstance().addToRequestQueue(jaksonreq);
+        VolleySingletons.getInstance(MainActivity.this).addToRequestQueue(jaksonreq);
     }
 
 

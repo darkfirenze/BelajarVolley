@@ -27,8 +27,8 @@ public class OkhttpStack extends HurlStack {
     public OkhttpStack() {
 
         okHttpKlien = new OkHttpClient();
-        okHttpKlien.setConnectTimeout(15, TimeUnit.SECONDS);
-        okHttpKlien.setReadTimeout(30, TimeUnit.SECONDS);
+        okHttpKlien.setConnectTimeout(30, TimeUnit.SECONDS);
+        okHttpKlien.setReadTimeout(60, TimeUnit.SECONDS);
 //        okHttpKlien.setWriteTimeout(60, TimeUnit.SECONDS);
 
         okFactory = new OkUrlFactory(okHttpKlien);
