@@ -27,7 +27,7 @@ public class Apis {
                 listenerok,errorListener
         );
 
-        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(5000, 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(2500, 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         gsonrequest.setRetryPolicy(retrycoba);
 
         return gsonrequest;

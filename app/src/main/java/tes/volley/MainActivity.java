@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(5000, 2, 1);
+        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(2500, 2, 1);
         strReq.setRetryPolicy(retrycoba);
 
         //tambahkan ke request voli
@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(5000, 2, 1);
+        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(2500, 2, 1);
         jaksonreq.setRetryPolicy(retrycoba);
 
         //tambahkan ke permintaan
