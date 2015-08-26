@@ -1,5 +1,6 @@
 package tes.volley.volleynet;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 
@@ -26,6 +27,8 @@ public class Apis {
                 listenerok,errorListener
         );
 
+        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(5000, 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        gsonrequest.setRetryPolicy(retrycoba);
 
         return gsonrequest;
     }

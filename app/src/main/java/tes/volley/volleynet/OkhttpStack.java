@@ -39,7 +39,6 @@ public class OkhttpStack extends HurlStack {
     protected HttpURLConnection createConnection(URL url) throws IOException {
         super.createConnection(url);
 
-//        HttpURLConnection httpconnect = okFactory.open(url);
         HttpURLConnection httpconnect = okFactory.open(url);
         httpconnect.setRequestProperty("Accept-Encoding", "");
 

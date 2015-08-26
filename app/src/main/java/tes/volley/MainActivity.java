@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -191,6 +192,10 @@ public class MainActivity extends AppCompatActivity {
 //            }
         };
 
+
+        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(5000, 2, 1);
+        strReq.setRetryPolicy(retrycoba);
+
         //tambahkan ke request voli
         VolleySingletons.getInstance(MainActivity.this).addToRequestQueue(strReq, "GET");
 
@@ -323,6 +328,9 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+
+        DefaultRetryPolicy retrycoba = new DefaultRetryPolicy(5000, 2, 1);
+        jaksonreq.setRetryPolicy(retrycoba);
 
         //tambahkan ke permintaan
         VolleySingletons.getInstance(MainActivity.this).addToRequestQueue(jaksonreq);
